@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · VELQORA{% endblock %}
+{% block content %}
+<section id="dashboard" class="hero">
+  <div>
+    <p class="eyebrow">INDIA + GLOBAL MARKETS</p>
+    <h1>Your market command center.</h1>
+    <p class="hero-copy">Search a ticker, inspect technicals, save it to your watchlist, track holdings and create price alerts.</p>
+  </div>
+  <div class="search-box">
+    <input id="tickerInput" value="RELIANCE.NS" placeholder="RELIANCE.NS, TCS.NS, AAPL...">
+    <button id="searchBtn" class="primary-btn">Analyze</button>
+    <button id="watchBtn" class="icon-btn" title="Add to watchlist">☆</button>
+  </div>
+</section>
+
+<section class="quick-row">
+  {% for name, ticker in popular_indian %}
+    <button class="chip quick-ticker" data-ticker="{{ ticker }}">{{ name }}</button>
+  {% endfor %}
+</section>
+
+<div id="loading" class="loading hidden"><div class="spinner"></div> Downloading market data and running the model…</div>
+<div id="errorBox" class="error-box hidden"></div>
+
+<section class="grid cards">
+  <article class="stat-card">
+    <span>Last close</span><strong id="lastClose">—</strong><small id="lastDate">—</small>
+  </article>
+  <article class="stat-card">
+    <span>Next-day signal</span><strong id="signal">—</strong><small id="confidence">Confidence —</small>
+  </article>
+  <article class="stat-card">
+    <span>Model test accuracy</span><strong id="accuracy">—</strong><small>Time-based holdout</small>
+  </article>
+  <article class="stat-card">
+    <span>20-day volatility</span><strong id="volatility">—</strong><small>Historical annualized proxy</small>
+  </article>
+</section>
+
+<section class="grid main-grid">
+  <article class="panel chart-panel">
+    <div class="panel-head"><div><span class="eyebrow">PRICE HISTORY</span><h2 id="chartTitle">60-day close</h2></div><span id="tickerBadge" class="badge">—</span></div>
+    <canvas id="priceChart"></canvas>
+  </article>
+  <article class="panel">
+    <div class="panel-head"><div><span class="eyebrow">TECHNICALS</span><h2>Market signals</h2></div></div>
+    <div class="metric-list">
+      <div><span>RSI (14)</span><strong id="rsi">—</strong></div>
+      <div><span>MACD</span><strong id="macd">—</strong></div>
+      <div><span>MACD Signal</span><strong id="macdSignal">—</strong></div>
+      <div><span>SMA (20)</span><strong id="sma20">—</strong></div>
+      <div><span>EMA (10)</span><strong id="ema10">—</strong></div>
+    </div>
+  </article>
+</section>
+
+<section id="watchlist" class="panel">
+  <div class="panel-head"><div><span class="eyebrow">PERSONAL</span><h2>Watchlist</h2></div><button class="ghost-btn" onclick="loadWatchlist()">Refresh</button></div>
+  <div id="watchlistGrid" class="watch-grid"></div>
+</section>
+
+<section id="portfolio" class="panel">
+  <div class="panel-head"><div><span class="eyebrow">TRACKING</span><h2>Portfolio</h2></div></div>
+  <div class="portfolio-summary">
+    <div><span>Total value</span><strong id="portfolioValue">₹0.00</strong></div>
+    <div><span>Total cost</span><strong id="portfolioCost">₹0.00</strong></div>
+    <div><span>Total P/L</span><strong id="portfolioPnl">₹0.00</strong></div>
+  </div>
+  <form id="holdingForm" class="inline-form">
+    <input name="ticker" placeholder="TCS.NS" required>
+    <input name="quantity" type="number" step="any" min="0.0001" placeholder="Quantity" required>
+    <input name="avg_price" type="number" step="any" min="0.01" placeholder="Avg buy ₹" required>
+    <button class="primary-btn">Add holding</button>
+  </form>
+  <div id="portfolioTable" class="table-wrap"></div>
+</section>
+
+<section id="alerts" class="panel">
+  <div class="panel-head"><div><span class="eyebrow">AUTOMATION</span><h2>Price alerts</h2></div></div>
+  <form id="alertForm" class="inline-form">
+    <input name="ticker" placeholder="RELIANCE.NS" required>
+    <input name="target_price" type="number" step="any" min="0.01" placeholder="Target price" required>
+    <select name="direction"><option value="above">Above</option><option value="below">Below</option></select>
+    <button class="primary-btn">Create alert</button>
+  </form>
+  <p class="muted small">Alerts are stored in your account and checked when the dashboard refreshes. For true background push notifications, connect an email/Telegram service later.</p>
+  <div id="alertsList"></div>
+</section>
+
+<section class="disclaimer">
+  <strong>Important:</strong> (NOT 100 % CORRECT PREDICTION).
+  Made by Sagar Goswami.  BCA AI-DS 3rd Year  </section>
+{% endblock %}

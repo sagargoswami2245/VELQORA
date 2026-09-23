@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Login' if mode == 'login' else 'Create account' }} · StockPilot{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="brand big">VELQORA</div>
+    <p class="muted"> Market analytics for stocks and indices.</p>
+    <h1>{{ 'Welcome back' if mode == 'login' else 'Create your account' }}</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+    {% endwith %}
+    <form method="post" class="stack">
+      {% if mode == 'register' %}
+      <label>Name<input name="name" required placeholder="Your name"></label>
+      {% endif %}
+      <label>Email<input type="email" name="email" required placeholder="you@example.com"></label>
+      <label>Password<input type="password" name="password" required minlength="6" placeholder="At least 6 characters"></label>
+      <button class="primary-btn" type="submit">{{ 'Log in' if mode == 'login' else 'Create account' }}</button>
+    </form>
+    <p class="switch-auth">
+      {% if mode == 'login' %}New here? <a href="{{ url_for('register') }}">Create an account</a>
+      {% else %}Already have an account? <a href="{{ url_for('login') }}">Log in</a>{% endif %}
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}VELQORA{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    {% if logged_in %}
+    <header class="topbar">
+      <a class="brand" href="/">VELQORA</a>
+      <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#watchlist">Watchlist</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#alerts">Alerts</a>
+      </nav>
+      <div class="user-menu">
+        <span>Hi, {{ user_name }}</span>
+        <a class="ghost-btn" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    </header>
+    {% endif %}
+    <main>{% block content %}{% endblock %}</main>
+    <footer> (NOT 100 % CORRECT PREDICTION).
+  Made by Sagar Goswami.  BCA AI-DS 3rd Year</footer>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
